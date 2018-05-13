@@ -2,13 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 /// Function that is called when a widget has been dismissed
-typedef void OnDismissedCallback(
-    int dismissedItem, DismissDirection direction);
+typedef void OnDismissedCallback(int dismissedItem, DismissDirection direction);
 
 /// Widget that animates scanning through a list of other widgets, like
 /// the iOS Cover Flow animation.
 class CoverFlow extends StatefulWidget {
-
   /// Called to build a widget that will be animated to loop through.
   final IndexedWidgetBuilder itemBuilder;
 
@@ -38,9 +36,21 @@ class CoverFlow extends StatefulWidget {
   /// cards one the user scrolls past the last one.
   final int itemCount;
 
-  const CoverFlow({@required this.itemBuilder, this.dismissibleItems: true,
-    this.dismissedCallback, this.viewportFraction: .85, this.height: 525,
-    this.width: 700, this.itemCount: null}) : assert(itemBuilder != null);
+  /// The index of the page to show. If specified, the initial item shown in view
+  /// will be the one at the given index. If not specified, it will default to 0,
+  /// or the first item.
+  final int initialIndex;
+
+  const CoverFlow(
+      {@required this.itemBuilder,
+      this.dismissibleItems: true,
+      this.dismissedCallback,
+      this.viewportFraction: .85,
+      this.height: 525,
+      this.width: 700,
+      this.itemCount: null,
+      this.initialIndex: 0})
+      : assert(itemBuilder != null);
 
   @override
   _CoverFlowState createState() => new _CoverFlowState();
@@ -55,6 +65,7 @@ class _CoverFlowState extends State<CoverFlow> {
   initState() {
     super.initState();
     controller = new PageController(viewportFraction: widget.viewportFraction);
+    currentPage = widget.initialIndex;
   }
 
   @override
